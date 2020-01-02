@@ -1,0 +1,44 @@
+<h2>Busqueda de cliente</h2>
+<form action="" method="get">
+    <div>
+        <label for="sid">Id subcliente</label>
+        <input type="text" name="sid" id="sid">
+    </div>
+    <div>
+        <input type="submit" value="Enviar">
+    </div>
+</form>
+
+<script>
+    //##### Functions ###############
+    /**
+    Funcion que hara peticion ajax y esperara respuesta
+    */
+    const sendData = async (url, method, body) => {
+        let response = await fetch(url, {
+            method: method,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        })
+        let data = await response.json()
+        console.log(data)
+        return data;
+    };//sendData
+
+    const handleForm = (e) => {
+        e.preventDefault()
+        //Peticion
+        const url = window.location.host
+        const id = document.getElementById('sid').value
+        //console.log(`http://${url}/getClientsById/${id}`)
+        sendData(`http://${url}/getClientsById/${id}`,'POST', {id: id})
+    };//handleForm
+    //##### End functions ###############
+
+    //##### MAIN ###############
+    const form = document.forms[0]
+    form.addEventListener('submit', handleForm)
+</script>
