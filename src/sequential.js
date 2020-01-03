@@ -16,7 +16,7 @@ const app = express();
 
 // ""FETCH""
 const axios = require("axios");
-
+const fetch = require("node-fetch");
 // RENDER TEMPLATES (VIEWS)
 const hbs = require("hbs");
 app.set("view engine", "hbs"); //Establece que express leera los archivos .hbs y los renderizara
@@ -37,13 +37,26 @@ app.post("/getClientsById/:id", async (req, res) => {
   await res.json(rows);
 });
 
+
+
 // template
 app.get("/getClients", async (req, res) => {
   let id = 8987;
-  const { data } = await axios.get(
+  /*const { data } = await axios.get(
     `${window.location.host}/getClientsById/${id}`
-  );
-  res.render("getClients", { data });
+  );*/
+  const data = await (async () => {
+    try {
+      const result = await fetch(`http://localhost/nodejs?sid=2975&startdate=20191231`);
+      let resultado =  await result.json();
+      return resultado;
+    } catch (e) {
+      console.log(e);
+    }
+  })();
+  console.table(data.rows);
+  //console.log(data2);
+  //res.render("getClients", { data });
 });
 
 // MAIN
